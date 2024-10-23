@@ -1,0 +1,58 @@
+{
+    "$schema": "https://aka.ms/json-schemas/copilot/declarative-agent/v1.0/schema.json",
+    "version": "v1.0",
+    "name": "Snow King",
+    "description": "Declarative agent created with Teams Toolkit",
+    "instructions": "$[file('instruction.txt')]",   
+
+    "conversation_starters": [
+        {
+            "title": "KB: List Outlook 2010 articles",
+            "text": "List the articles regarding Outlook 2010. Place the results in a table with the article title in one column and a brief summary in the other"
+        },
+        {
+            "title": "KB: Draft an email",
+            "text": "Please draft an email to my manager including a status update on the Sales Force automation outage. Include a summary of the problem and prognosis for a fix"
+        },
+        {
+            "title": "Actions: My incidents",
+            "text": "List my incidents"
+        },
+        {
+            "title": "Catalog: Hardware",
+            "text": "How do I request a new laptop?"
+        },
+        {
+            "title": "SharePoint",
+            "text": "List the items from the snow spreadsheet and format as a table. Also, please add an integer column as the first column, listing the item numbers."
+        }
+    ],
+    "actions": [
+        {
+            "id": "action_1",
+            "file": "ai-plugin.json"
+        }
+    ],
+    "capabilities": [
+        {
+            "name": "GraphConnectors",
+            "connections": [
+                {
+                    "connection_id": "ServiceNowCatalog5"
+                },
+                {
+                    "connection_id": "ServiceNowKB5"
+                }
+            ]
+        }     ,
+        {
+            "name": "OneDriveAndSharePoint",
+            "items_by_url": [
+                {
+                    "url": "https://m365cpi69113837.sharepoint.com/sites/naruto"
+                }
+                
+            ]
+        }
+    ]
+}

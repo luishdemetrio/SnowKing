@@ -1,0 +1,91 @@
+{
+    "$schema": "https://aka.ms/json-schemas/copilot/plugin/v2.1/schema.json",
+    "schema_version": "v2.1",
+    "name_for_human": "SN",
+    "description_for_human": "API to retrieve and create ServiceNow incidents",
+    "namespace": "sn",
+    "functions": [
+        {
+            "name": "getIncidents",
+            "description": "Fetches a list of ServiceNow incidents by user name",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$.result",
+                    "properties": {
+                        "title": "$.short_description",
+                        "subtitle": "$.number"
+                    },
+                    "static_template": {
+                        "type": "AdaptiveCard",
+                        "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+                        "version": "1.5",
+                        "body": [
+                            {
+                                "type": "Container",
+                                "$data": "${$root}",
+                                "items": [
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Number: ${if(number, number, 'N/A')}",
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "Short Description: ${if(short_description, short_description, 'N/A')}",
+                                        "wrap": true
+                                    },
+                                    {
+                                        "type": "TextBlock",
+                                        "text": "State: ${if(state, state, 'N/A')}",
+                                        "wrap": true
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                }
+            }
+        },
+        {
+            "name": "createIncident",
+            "description": "Creates a new incident in ServiceNow on behalf of the logged in user",
+            "capabilities": {
+              "response_semantics": {
+                "data_path": "$",
+                "properties": {
+                  "title": "$.results.number",
+                  "subtitle": "$.results.short_description"
+                }
+              },
+              "confirmation": {
+                "type": "AdaptiveCard",
+                "title": "Create a new ServiceNow incident on behalf of the logged in user.",
+                "body": "* **username**: {{function.parameters.username}}\n* **short_description**: {{function.parameters.short_description}} **description**: {{function.parameters.description}}"
+              }
+            }
+          }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "None"
+            },
+            "spec": {
+                "url": "apiSpecificationFile/openapi.yaml"
+            },
+            "run_for_functions": [
+                "getIncidents",
+                "createIncident"
+            ]
+        }
+    ],
+    "capabilities": {
+        "localization": {},
+        "conversation_starters": [
+            {
+                "text": "Retrieve ServiceNow incidents"
+            }
+        ]
+    }
+}
